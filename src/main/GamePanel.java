@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // GAME STATE
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
@@ -71,7 +72,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         playMusic(0);
         stopMusic();
-        gameState = playState;
+        gameState = titleState;
     }
 
     public void startGameThread() {
@@ -141,37 +142,48 @@ public class GamePanel extends JPanel implements Runnable {
             drawStart = System.nanoTime();
         }
 
-        // TILE
-        tileManager.draw(g2);
+        // TITLE SCREEN
+        if(gameState == titleState) {
 
-        // OBJECT
-        for(SuperObject ob : obs) {
-            if(ob != null) {
-                ob.draw(g2, this);
+            ui.draw(g2);
+
+        } else {
+
+            // TILE
+            tileManager.draw(g2);
+
+            // OBJECT
+            for(SuperObject ob : obs) {
+                if(ob != null) {
+                    ob.draw(g2, this);
+                }
             }
-        }
 
-        // NPC
-        for(Entity ob : npc) {
-            if(ob != null) {
-                ob.draw(g2);
+            // NPC
+            for(Entity ob : npc) {
+                if(ob != null) {
+                    ob.draw(g2);
+                }
             }
+
+            // PLAYER
+            player.draw(g2);
+
+            // UI
+            ui.draw(g2);
+
+            // DEBUG
+            if(keyHandler.checkDrawTime) {
+                long drawEnd = System.nanoTime();
+                long passed = drawEnd - drawStart;
+                g2.setColor(Color.white);
+                g2.drawString("Draw Time: " + passed, 100, 400);
+                System.out.println("Draw Time: " + passed);
+            }
+
+
         }
 
-        // PLAYER
-        player.draw(g2);
-
-        // UI
-        ui.draw(g2);
-
-        // DEBUG
-        if(keyHandler.checkDrawTime) {
-            long drawEnd = System.nanoTime();
-            long passed = drawEnd - drawStart;
-            g2.setColor(Color.white);
-            g2.drawString("Draw Time: " + passed, 100, 400);
-            System.out.println("Draw Time: " + passed);
-        }
 
         g2.dispose();
     }
