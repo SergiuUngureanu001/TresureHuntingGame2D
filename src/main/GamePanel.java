@@ -2,11 +2,12 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -44,8 +45,16 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyHandler);
-    public SuperObject obs[] = new SuperObject[10];
+    public Entity obs[] = new Entity[10];
     public Entity npc[] = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
+    Comparator<Entity> sortedEntity = new Comparator<Entity>() {
+        @Override
+        public int compare(Entity a, Entity b) {
+            int result = Integer.compare(a.worldY, b.worldY);
+            return result;
+        }
+    };
 
     // GAME STATE
     public int gameState;
@@ -120,7 +129,7 @@ public class GamePanel extends JPanel implements Runnable {
             player.update();
 
             // NPC
-            for(Entity e: npc) {
+            for(Entity e : npc) {
                 if(e != null) {
                     e.update();
                 }
@@ -153,22 +162,30 @@ public class GamePanel extends JPanel implements Runnable {
             // TILE
             tileManager.draw(g2);
 
-            // OBJECT
-            for(SuperObject ob : obs) {
-                if(ob != null) {
-                    ob.draw(g2, this);
+            // ADD ENTITIES TO THE LIST
+            entityList.add(player);
+
+            for(Entity e : npc) {
+                if(e != null) {
+                    entityList.add(e);
                 }
             }
 
-            // NPC
-            for(Entity ob : npc) {
-                if(ob != null) {
-                    ob.draw(g2);
+            for(Entity e : obs) {
+                if(e != null) {
+                    entityList.add(e);
                 }
             }
 
-            // PLAYER
-            player.draw(g2);
+            entityList.sort(sortedEntity);
+
+            for(Entity e : entityList) {
+                if(e != null) {
+                    e.draw(g2);
+                }
+            }
+
+            entityList.clear();
 
             // UI
             ui.draw(g2);
