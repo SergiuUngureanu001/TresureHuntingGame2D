@@ -15,17 +15,20 @@ public class Entity {
     public int speed;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public String direction = "down";
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+    public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter = 0;
     public boolean invincible = false;
     public int invincibleCounter = 0;
+    boolean attacking = false;
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
     public BufferedImage image, image2, image3;
@@ -124,6 +127,14 @@ public class Entity {
             }
             spriteCounter = 0;
         }
+
+        if(invincible) {
+            invincibleCounter++;
+            if(invincibleCounter > 40) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     public void draw(Graphics2D g2) {
@@ -179,19 +190,26 @@ public class Entity {
                 }
             }
 
-            g2.drawImage(image, screenX, screenY, null);
+            if(invincible) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            }
+
+            g2.drawImage(image, screenX, screenY,null);
+
+            // Reset alpha
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         }
     }
 
-    public BufferedImage setup(String path) {
+    public BufferedImage setup(String path, int width, int height) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
         try {
 
             image = ImageIO.read(getClass().getResourceAsStream(path + ".png"));
-            image = uTool.scaleImage(image, GamePanel.tileSize, GamePanel.tileSize);
+            image = uTool.scaleImage(image, width, height);
 
         } catch (IOException e) {
             e.printStackTrace();

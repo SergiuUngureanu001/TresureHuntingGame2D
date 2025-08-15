@@ -15,6 +15,6 @@ public class OBJ_Chest extends Entity  {
         super(gp);
 
         name = "Chest";
-        down1 = setup("/objects/chest");
+        down1 = setup("/objects/chest", GamePanel.tileSize,  GamePanel.tileSize);
     }
 }
