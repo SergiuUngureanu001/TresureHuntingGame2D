@@ -40,6 +40,8 @@ public class Player extends Entity {
     private void setDefaultValues() {
         worldX = GamePanel.tileSize * 23;
         worldY = GamePanel.tileSize * 21;
+        // worldX = GamePanel.tileSize * 10;
+        // worldY = GamePanel.tileSize * 13;
         speed = 4;
         direction = "down";
 
@@ -89,6 +91,10 @@ public class Player extends Entity {
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
 
+            // CHECK MONSTER COLLISION
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+            contactMonster(monsterIndex);
+
             // CHECK EVENT
             gp.eventHandler.checkEvent();
 
@@ -136,6 +142,26 @@ public class Player extends Entity {
             }
         }
 
+        // This needs to be outside of the key if statement!
+        if(invincible) {
+            invincibleCounter++;
+            if(invincibleCounter > 60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
+
+    }
+
+    public void contactMonster(int i) {
+        if(i != 999) {
+
+            if(!invincible) {
+                life--;
+                invincible = true;
+            }
+
+        }
     }
 
     public void pickUpObject(int i) {
@@ -201,8 +227,14 @@ public class Player extends Entity {
             }
         }
 
+        if(invincible) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
         g2.drawImage(image, screenX, screenY,null);
 
+        // Reset alpha
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
 }
