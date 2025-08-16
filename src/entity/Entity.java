@@ -111,7 +111,12 @@ public class Entity {
             if(!gp.player.invincible) {
                 // we can give damage
                 gp.playSE(6);
-                gp.player.life--;
+
+                int damage = attack - gp.player.defense;
+                if(damage < 0) {
+                    damage = 0;
+                }
+                gp.player.life -= damage;
                 gp.player.invincible = true;
             }
         }
@@ -216,7 +221,7 @@ public class Entity {
             if(this.type == 2 && hpBarOn) {
 
                 double onScale = (double)GamePanel.tileSize / maxLife;
-                double hpBarValue = onScale * life;
+                double hpBarValue = (life > 0 ? onScale * life : 0);
 
                 g2.setColor(new Color(35, 35, 35));
                 g2.fillRect(screenX - 1, screenY - 16, GamePanel.tileSize + 2, 12);
