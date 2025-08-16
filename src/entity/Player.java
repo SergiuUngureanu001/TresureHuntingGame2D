@@ -3,6 +3,8 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,6 +18,7 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     int standCounter = 0;
+    public boolean attackCancel = false;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -50,8 +53,26 @@ public class Player extends Entity {
         direction = "down";
 
         // PLAYER STATUS
+        level = 1;
         maxLife = 6;
         life = maxLife;
+        strength = 1; // The more strength hr has, the more damage he gives
+        dexterity = 1; // The more dexterity he has, the less damge he receives
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack(); // The total attack value is decided by strebgth and weapon
+        defense = getDefense(); // The total defense value is decided by dexterity and shield
+    }
+
+    public int getAttack() {
+        return attack = strength * currentWeapon.attackValue;
+    }
+
+    public int getDefense() {
+        return defense = dexterity * currentShield.defenseValue;
     }
 
     public void getPlayerImage() {
@@ -142,6 +163,14 @@ public class Player extends Entity {
                     }
                 }
             }
+
+            if(keyH.enterPressed && !attackCancel) {
+                gp.playSE(7);
+                attacking = true;
+                spriteCounter = 0;
+            }
+
+            attackCancel  = false;
             gp.keyHandler.enterPressed = false;
 
             spriteCounter++;
@@ -266,15 +295,10 @@ public class Player extends Entity {
 
         if(gp.keyHandler.enterPressed) {
             if(i != 999) {
+                attackCancel = true;
+                gp.gameState = gp.dialogueState;
+                gp.npc[i].speak();
 
-                if(gp.keyHandler.enterPressed) {
-                    gp.gameState = gp.dialogueState;
-                    gp.npc[i].speak();
-                }
-
-            } else {
-                gp.playSE(7);
-                attacking = true;
             }
         }
     }
