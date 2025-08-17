@@ -22,7 +22,7 @@ public class Player extends Entity {
     int standCounter = 0;
     public boolean attackCancel = false;
     public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int intventorySize = 20;
+    public final int maxIntventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -40,8 +40,8 @@ public class Player extends Entity {
         solidArea.width = 32;
         solidArea.height = 32;
 
-        attackArea.width = 36;
-        attackArea.height = 36;
+        // attackArea.width = 36;
+        // attackArea.height = 36;
 
         setDefaultValues();
         getPlayerImage();
@@ -75,15 +75,10 @@ public class Player extends Entity {
     public void setItems() {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
     }
 
     public int getAttack() {
+        attackArea = currentWeapon.attackArea;
         return attack = strength * currentWeapon.attackValue;
     }
 
@@ -105,14 +100,26 @@ public class Player extends Entity {
     }
 
     public void getPlayerAttackImage() {
-        attackUp1 = setup("/player/boy_attack_up_1", GamePanel.tileSize,  GamePanel.tileSize * 2);
-        attackUp2 = setup("/player/boy_attack_up_2", GamePanel.tileSize,  GamePanel.tileSize * 2);
-        attackDown1 = setup("/player/boy_attack_down_1", GamePanel.tileSize,  GamePanel.tileSize * 2);
-        attackDown2 = setup("/player/boy_attack_down_2", GamePanel.tileSize,  GamePanel.tileSize * 2);
-        attackLeft1 = setup("/player/boy_attack_left_1", GamePanel.tileSize * 2,  GamePanel.tileSize);
-        attackLeft2 = setup("/player/boy_attack_left_2", GamePanel.tileSize * 2,  GamePanel.tileSize);
-        attackRight1 = setup("/player/boy_attack_right_1", GamePanel.tileSize * 2,  GamePanel.tileSize);
-        attackRight2 = setup("/player/boy_attack_right_2", GamePanel.tileSize * 2,  GamePanel.tileSize);
+        if(currentWeapon.type == type_sword) {
+            attackUp1 = setup("/player/boy_attack_up_1", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackUp2 = setup("/player/boy_attack_up_2", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackDown1 = setup("/player/boy_attack_down_1", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackDown2 = setup("/player/boy_attack_down_2", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackLeft1 = setup("/player/boy_attack_left_1", GamePanel.tileSize * 2,  GamePanel.tileSize);
+            attackLeft2 = setup("/player/boy_attack_left_2", GamePanel.tileSize * 2,  GamePanel.tileSize);
+            attackRight1 = setup("/player/boy_attack_right_1", GamePanel.tileSize * 2,  GamePanel.tileSize);
+            attackRight2 = setup("/player/boy_attack_right_2", GamePanel.tileSize * 2,  GamePanel.tileSize);
+        } else if(currentWeapon.type == type_axe) {
+            attackUp1 = setup("/player/boy_axe_up_1", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackUp2 = setup("/player/boy_axe_up_2", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackDown1 = setup("/player/boy_axe_down_1", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackDown2 = setup("/player/boy_axe_down_2", GamePanel.tileSize,  GamePanel.tileSize * 2);
+            attackLeft1 = setup("/player/boy_axe_left_1", GamePanel.tileSize * 2,  GamePanel.tileSize);
+            attackLeft2 = setup("/player/boy_axe_left_2", GamePanel.tileSize * 2,  GamePanel.tileSize);
+            attackRight1 = setup("/player/boy_axe_right_1", GamePanel.tileSize * 2,  GamePanel.tileSize);
+            attackRight2 = setup("/player/boy_axe_right_2", GamePanel.tileSize * 2,  GamePanel.tileSize);
+        }
+
     }
 
     public void update() {
@@ -337,6 +344,17 @@ public class Player extends Entity {
     public void pickUpObject(int i) {
         if(i != 999) {
 
+            String text;
+
+            if(inventory.size() != maxIntventorySize) {
+                inventory.add(gp.obs[i]);
+                gp.playSE(1);
+                text = "Got a " + gp.obs[i].name + "!";
+            } else {
+                text = "You cannot carry any more!";
+            }
+            gp.ui.addMessage(text);
+            gp.obs[i] = null;
         }
     }
 
@@ -349,6 +367,29 @@ public class Player extends Entity {
                 gp.npc[i].speak();
 
             }
+        }
+    }
+
+    public void selectItem() {
+        int itemIndex = gp.ui.getItemIndexOnSlot();
+        if(itemIndex < inventory.size()) {
+            Entity selectedItem = inventory.get(itemIndex);
+
+            if(selectedItem.type == type_sword || selectedItem.type == type_axe) {
+                currentWeapon = selectedItem;
+                attack = getAttack();
+                getPlayerAttackImage();
+            }
+            if(selectedItem.type == type_shield) {
+                currentShield = selectedItem;
+                defense = getDefense();
+            }
+            if(selectedItem.type == type_consumable) {
+                selectedItem.use(this);
+                inventory.remove(itemIndex);
+
+            }
+
         }
     }
 
