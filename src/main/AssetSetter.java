@@ -15,15 +15,15 @@ public class AssetSetter {
     public void setObject() {
 
         int i = 0;
-        gp.obs[i] = new OBJ_Key(gp);
+        gp.obs[i] = new OBJ_Coin_Bronze(gp);
         gp.obs[i].worldX = GamePanel.tileSize * 25;
         gp.obs[i].worldY = GamePanel.tileSize * 19;
         i++;
-        gp.obs[i] = new OBJ_Key(gp);
+        gp.obs[i] = new OBJ_Coin_Bronze(gp);
         gp.obs[i].worldX = GamePanel.tileSize * 21;
         gp.obs[i].worldY = GamePanel.tileSize * 19;
         i++;
-        gp.obs[i] = new OBJ_Key(gp);
+        gp.obs[i] = new OBJ_Coin_Bronze(gp);
         gp.obs[i].worldX = GamePanel.tileSize * 25;
         gp.obs[i].worldY = GamePanel.tileSize * 21;
         i++;
@@ -38,6 +38,14 @@ public class AssetSetter {
         gp.obs[i] = new OBJ_Potion_Red(gp);
         gp.obs[i].worldX = GamePanel.tileSize * 22;
         gp.obs[i].worldY = GamePanel.tileSize * 27;
+        i++;
+        gp.obs[i] = new OBJ_Heart(gp);
+        gp.obs[i].worldX = GamePanel.tileSize * 22;
+        gp.obs[i].worldY = GamePanel.tileSize * 29;
+        i++;
+        gp.obs[i] = new OBJ_ManaCrystal(gp);
+        gp.obs[i].worldX = GamePanel.tileSize * 22;
+        gp.obs[i].worldY = GamePanel.tileSize * 31;
         i++;
 
     }

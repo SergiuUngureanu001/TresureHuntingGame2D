@@ -69,8 +69,8 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
-        // projectile = new OBJ_Fireball(gp);
-        projectile = new OBJ_Rock(gp);
+        projectile = new OBJ_Fireball(gp);
+        // projectile = new OBJ_Rock(gp);
         attack = getAttack(); // The total attack value is decided by strebgth and weapon
         defense = getDefense(); // The total defense value is decided by dexterity and shield
     }
@@ -244,6 +244,12 @@ public class Player extends Entity {
         if(shotAvailableCounter < 30) {
             shotAvailableCounter++;
         }
+        if(life > maxLife) {
+            life = maxLife;
+        }
+        if(mana > maxMana) {
+            mana = maxMana;
+        }
 
     }
 
@@ -367,17 +373,30 @@ public class Player extends Entity {
     public void pickUpObject(int i) {
         if(i != 999) {
 
-            String text;
 
-            if(inventory.size() != maxIntventorySize) {
-                inventory.add(gp.obs[i]);
-                gp.playSE(1);
-                text = "Got a " + gp.obs[i].name + "!";
-            } else {
-                text = "You cannot carry any more!";
+            // PICKUP ONLY ITEMS
+            if(gp.obs[i].type == type_pickupOnly) {
+
+                gp.obs[i].use(this);
+                gp.obs[i] = null;
             }
-            gp.ui.addMessage(text);
-            gp.obs[i] = null;
+
+            // INVENTORY ITEMS
+            else {
+                String text;
+
+                if(inventory.size() != maxIntventorySize) {
+                    inventory.add(gp.obs[i]);
+                    gp.playSE(1);
+                    text = "Got a " + gp.obs[i].name + "!";
+                } else {
+                    text = "You cannot carry any more!";
+                }
+                gp.ui.addMessage(text);
+                gp.obs[i] = null;
+            }
+
+
         }
     }
 

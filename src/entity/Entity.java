@@ -60,6 +60,7 @@ public class Entity {
     public Projectile projectile;
 
     // ITEM ATTRIBUTES
+    public int value;
     public int attackValue;
     public int defenseValue;
     public String description = "";
@@ -74,6 +75,7 @@ public class Entity {
     public final int type_axe = 4;
     public final int type_shield = 5;
     public final int type_consumable = 6;
+    public final int type_pickupOnly = 7;
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -82,6 +84,20 @@ public class Entity {
     public void setAction() {}
 
     public void use(Entity entity) {}
+
+    public void checkDrop() {}
+
+    public void dropItem(Entity droppedItem) {
+
+        for(int i = 0; i < gp.obs.length; i++) {
+            if(gp.obs[i] == null) {
+                gp.obs[i] = droppedItem;
+                gp.obs[i].worldX = worldX; // the dead monster's worldX
+                gp.obs[i].worldY = worldY;
+                break;
+            }
+        }
+    }
 
     public void damageReaction() {}
 
