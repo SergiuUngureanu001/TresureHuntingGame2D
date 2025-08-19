@@ -198,8 +198,8 @@ public class UI {
             g2.drawString(text, x, y);
 
             // BLUE BOY IMAGE
-            x += GamePanel.screenWidth / 2 - GamePanel.tileSize * 2;
-            y += GamePanel.tileSize * 2;
+            x = GamePanel.screenWidth / 2 -  GamePanel.tileSize;
+            y = GamePanel.screenHeight / 2 - 2 * GamePanel.tileSize;
             g2.drawImage(gp.player.down1, x, y, GamePanel.tileSize * 2, GamePanel.tileSize * 2, null);
 
             // MENU
@@ -308,7 +308,7 @@ public class UI {
 
     public void drawCharacterScreen() {
         // CREATE A FRAME
-        final int frameX = GamePanel.tileSize;
+        final int frameX = GamePanel.tileSize * 2;
         final int frameY =  GamePanel.tileSize;
         final int frameWidth = GamePanel.tileSize * 5;
         final int frameHeight =  GamePanel.tileSize * 10;
@@ -414,7 +414,7 @@ public class UI {
     public void drawInventory() {
 
         // FRAME
-        int frameX = GamePanel.tileSize * 9;
+        int frameX = GamePanel.tileSize * 12;
         int frameY = GamePanel.tileSize;
         int frameWidth = GamePanel.tileSize * 6 - 10;
         int frameHeight = GamePanel.tileSize * 5 - 10;
