@@ -57,9 +57,7 @@ public class EventHandler {
                 teleport(gp.dialogueState);
             }*/
             if(hit(23, 12, "up")) {
-                if(gp.player.life != gp.player.maxLife) {
-                    healingPool(23, 12, gp.dialogueState);
-                }
+                healingPool(23, 12, gp.dialogueState);
             }
         }
 
