@@ -165,7 +165,18 @@ public class KeyHandler implements KeyListener {
             }
         }
         if(code == KeyEvent.VK_R) {
-            gp.tileManager.loadMap("/maps/worldV2.txt");
+            switch (gp.currentMap) {
+                case 0: {
+                    gp.tileManager.loadMap("/maps/worldV2.txt", 0);
+                    break;
+                }
+
+                case 1: {
+                    gp.tileManager.loadMap("/maps/interior01.txt", 1);
+                    break;
+                }
+            }
+
         }
 
     }
@@ -238,6 +249,13 @@ public class KeyHandler implements KeyListener {
             case 1: {
                 maxCommandNum = 1;
                 break;
+            }
+            case 2: {
+                maxCommandNum = 1;
+            }
+
+            case 3: {
+                maxCommandNum = 2;
             }
         }
         if(code == KeyEvent.VK_W) {

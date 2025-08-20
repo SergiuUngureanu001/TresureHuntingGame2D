@@ -90,10 +90,10 @@ public class Entity {
     public void dropItem(Entity droppedItem) {
 
         for(int i = 0; i < gp.obs.length; i++) {
-            if(gp.obs[i] == null) {
-                gp.obs[i] = droppedItem;
-                gp.obs[i].worldX = worldX; // the dead monster's worldX
-                gp.obs[i].worldY = worldY;
+            if(gp.obs[gp.currentMap][i] == null) {
+                gp.obs[gp.currentMap][i] = droppedItem;
+                gp.obs[gp.currentMap][i].worldX = worldX; // the dead monster's worldX
+                gp.obs[gp.currentMap][i].worldY = worldY;
                 break;
             }
         }
