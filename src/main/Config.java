@@ -1,9 +1,13 @@
 package main;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Config {
-
     GamePanel gp;
 
     public Config(GamePanel gp) {
@@ -14,28 +18,27 @@ public class Config {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter("config.txt"));
 
-            // Full screen
-            if(gp.fullScreenOn) {
-                bw.write("Full Screen ON");
+            // FULL SCREEN
+            if (gp.fullScreenOn == true) {
+                bw.write("On");
             }
-            if(!gp.fullScreenOn) {
-                bw.write("Full Screen OFF");
+
+            if (gp.fullScreenOn == false) {
+                bw.write("Off");
             }
             bw.newLine();
 
-            // Music volume
+            // MUSIC VOLUME
             bw.write(String.valueOf(gp.music.volumeScale));
             bw.newLine();
 
-            // SE volume
+            // SE VOLUME
             bw.write(String.valueOf(gp.se.volumeScale));
             bw.newLine();
 
             bw.close();
-
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println(1);
         }
     }
 
@@ -45,30 +48,26 @@ public class Config {
 
             String s = br.readLine();
 
-            // Full screen
-            if(s.equals("Full Screen ON")) {
+            // FULL SCREEN
+            if (s.equals("On")) {
                 gp.fullScreenOn = true;
             }
-            if(s.equals("Full Screen OFF")) {
+
+            if (s.equals("Off")) {
                 gp.fullScreenOn = false;
             }
 
-            // Music volume
+            // MUSIC VOLUME
             s = br.readLine();
             gp.music.volumeScale = Integer.parseInt(s);
 
-            // SE volume
+            // SE VOLUME
             s = br.readLine();
             gp.se.volumeScale = Integer.parseInt(s);
 
             br.close();
-
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(1);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
-
 }
